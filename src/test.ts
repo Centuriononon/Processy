@@ -15,4 +15,5 @@ class ProcessA extends FSM.Process<'CONTEXT', 'STATE'> {
     }
 }
 
-new ProcessA('CONTEXT').init('STATE');
+
+new ProcessA('CONTEXT').init('STATE').init('STATE');
