@@ -1,7 +1,7 @@
 import { ObservableProcess } from "./observable-process";
 
-export abstract class Process<Ctx, State, Option = void> 
-extends ObservableProcess<State, string, 'OK' | 'ERR'> {
+export abstract class Process<Ctx, State, Option = void>
+    extends ObservableProcess<State, string, 'OK' | 'ERR'> {
     protected _working: boolean = false;
     protected _inited: boolean = false;
 

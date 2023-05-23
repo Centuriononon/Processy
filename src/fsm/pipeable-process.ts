@@ -2,7 +2,8 @@ import { Process } from "./process";
 import { trampolineAsync } from "../utils/trampoline-async";
 import { CompleteHandler, CrashHandler, IStartableProcess } from "./types";
 
-export class PipeableProcess<Ctx, State> extends Process<Ctx, State, any> {
+export class PipeableProcess<Ctx, State>
+    extends Process<Ctx, State, IStartableProcess<Ctx, State, any>[]> {
     protected _current?: Process<Ctx, State, any>;
 
     constructor(ctx: Ctx, state: State) {
@@ -16,8 +17,8 @@ export class PipeableProcess<Ctx, State> extends Process<Ctx, State, any> {
     }
 
     private startProcess(
-        processes: IStartableProcess<Ctx, State, any>[], 
-        id: number, 
+        processes: IStartableProcess<Ctx, State, any>[],
+        id: number,
         state: State
     ): Promise<any> {
         return new Promise(resolve => {

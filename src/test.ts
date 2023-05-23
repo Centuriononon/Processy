@@ -18,7 +18,7 @@ class TestingProcess extends FSM.Process<'CONTEXT', string, string> {
 }
 
 new FSM.StartableProcess(
-    FSM.PipeableProcess,
+    FSM.PipeableProcess<'CONTEXT', string>, 
     new Array(5).fill(0).map((_, i) => 
         new FSM.StartableProcess(TestingProcess, `Process #${i+1}`)
     )
