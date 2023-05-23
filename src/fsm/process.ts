@@ -1,23 +1,22 @@
 import { ObservableProcess } from "./observable-process";
 
-export abstract class Process<Ctx, State> extends ObservableProcess<State, string, 'OK' | 'ERR'> {
-    protected _state?: State;
+export abstract class Process<Ctx, State, Option = void> 
+extends ObservableProcess<State, string, 'OK' | 'ERR'> {
     protected _working: boolean = false;
     protected _inited: boolean = false;
 
-    constructor(protected readonly _ctx: Ctx) {
+    constructor(protected readonly _ctx: Ctx, protected _state: State) {
         super();
     }
 
-    protected abstract run(initialState: State): 'OK';
+    protected abstract run(option: Option): 'OK';
 
-    init(initialState: State) {
+    start(option: Option) {
         if (this._inited) throw new Error('Second init() call of process');
 
-        this._state = initialState;
         this._working = true;
         this._inited = true;
-        this.run(initialState);
+        this.run(option);
 
         return this;
     }

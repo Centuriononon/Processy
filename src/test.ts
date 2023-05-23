@@ -1,19 +1,25 @@
 import * as FSM from './index';
 
-class ProcessA extends FSM.Process<'CONTEXT', 'STATE'> {
-    constructor(private readonly ctx: 'CONTEXT') {
-        super(ctx);
+class TestingProcess extends FSM.Process<'CONTEXT', string, string> {
+    constructor(ctx: 'CONTEXT', state: string) {
+        super(ctx, state);
     }
 
-    protected run(initialState: 'STATE') {
+    protected run(processName: string) {
+        console.log('Testing for', processName);
+
         setTimeout(() => {
-            console.log('ProcessA is completed');
-            this.complete(initialState);
+            console.log(`${processName} is completed`);
+            this.complete(this._state);
         }, 2000)
 
         return 'OK' as const;
     }
 }
 
-
-new ProcessA('CONTEXT').init('STATE').init('STATE');
+new FSM.StartableProcess(
+    FSM.PipeableProcess,
+    new Array(5).fill(0).map((_, i) => 
+        new FSM.StartableProcess(TestingProcess, `Process #${i+1}`)
+    )
+).start('CONTEXT', 'Initial State');
