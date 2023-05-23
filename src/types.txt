@@ -1,0 +1,37 @@
+// process can be started and stopped
+// Each process is independent  
+
+new RestartableProcess(
+    new StartableProcess(
+        PipeableProcess,
+        Ctx,
+        [
+            new StartableProcess(VerifyingProcess),
+            new StartableProcess(PayingProcess),
+            new RestartableProcess(
+                new StartableProcess(AccessingProcess), 
+                { attemts: 2 }
+            )
+        ]
+    ),
+    { 
+        attempts: 2, // Will try to start two times on crash
+        processing: 1 // Processes only once, Infinity to loop, 1 is default value 
+    }
+).start(); // StartableProcess.start --> 'OK';
+
+
+
+RestartableProcess.start() --> StartableProcess.start() --> ObservableProcess.start observes* --> 
+
+RestartableProcess.start() --> 
+    StartableProcess.start() --? ObservableProcess --> ObservableProcess.observe --> new Process().run()
+    --> new Process().run()
+
+RestartableProcess.start() -->
+    StartableProcess.start() --* ObservableProcess.observed --> new Process(ctx, state).run()
+
+
+new VerifyingProcess()
+
+
