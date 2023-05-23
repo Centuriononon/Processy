@@ -1,4 +1,4 @@
-class PubSub<T> {
+export class PubSub<T> {
     private handlers: { [eventName in keyof T]?: ((value: T[eventName]) => void)[] }
 
     constructor() {

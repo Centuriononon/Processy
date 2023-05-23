@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.ts",
 	"scripts": {
-		"dev": "ts-node"
+		"dev": "ts-node src/test.ts"
 	},
 	"devDependencies": {
 		"@types/node": "^18.14.2",
