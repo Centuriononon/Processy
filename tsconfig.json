@@ -1,0 +1,47 @@
+{
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "ES6",
+		"module": "CommonJS",
+		"lib": [
+			"dom",
+			"esnext.asynciterable"
+		],
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"useUnknownInCatchVariables": false,
+		"strict": true,
+		"esModuleInterop": true,
+		"sourceMap": true,
+		"pretty": true,
+		"baseUrl": "src",
+		"outDir": "dist",
+		"allowJs": false,
+		"removeComments": true,
+		"strictBindCallApply": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitReturns": true,
+		"noEmitOnError": true,
+		"noFallthroughCasesInSwitch": true,
+		"allowSyntheticDefaultImports": true,
+		"downlevelIteration": true,
+		"resolveJsonModule": true,
+		"noErrorTruncation": true,
+		"paths": {}
+	},
+	"ts-node": {
+		// Tell ts-node CLI to install the --loader automatically
+		"esm": true
+	},
+	"include": [
+		"./**/*.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
