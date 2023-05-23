@@ -1,18 +1,18 @@
 import { Process } from "./process";
 import { IStartableProcess, IConstructableProcess } from "./types";
 
-export class StartableProcess<Ctx, State, Option>
-    implements IStartableProcess<Ctx, State, Option> {
+export class StartableProcess<Ctx, State, Options>
+    implements IStartableProcess<Ctx, State, Options> {
     constructor(
-        private readonly process: IConstructableProcess<Ctx, State, Option>,
-        private readonly option: Option
+        private readonly process: IConstructableProcess<Ctx, State, Options>,
+        private readonly option: Options
     ) { }
 
     initiated(ctx: Ctx, state: State) {
         return new this.process(ctx, state);
     }
 
-    started(initiated: Process<Ctx, State, Option>) {
+    started(initiated: Process<Ctx, State, Options>) {
         return initiated.start(this.option);
     }
 

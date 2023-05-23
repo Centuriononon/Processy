@@ -1,7 +1,6 @@
 import { ObservableProcess } from "./observable-process";
 
-export abstract class Process<Ctx, State, Option = void>
-    extends ObservableProcess<State, string, 'OK' | 'ERR'> {
+export abstract class Process<Ctx, State, Options = void> extends ObservableProcess<State> {
     protected _working: boolean = false;
     protected _inited: boolean = false;
 
@@ -9,9 +8,9 @@ export abstract class Process<Ctx, State, Option = void>
         super();
     }
 
-    protected abstract run(option: Option): 'OK';
+    protected abstract run(option: Options): 'OK';
 
-    start(option: Option) {
+    start(option: Options) {
         if (this._inited) throw new Error('Second init() call of process');
 
         this._working = true;
@@ -26,12 +25,12 @@ export abstract class Process<Ctx, State, Option = void>
         this._working = false;
     }
 
-    protected complete(state: State) {
+    protected complete = (state: State) => {
         this.pub('complete', state);
         this.stop('OK');
     }
 
-    protected crash(reason: string) {
+    protected crash = (reason: string) => {
         this.pub('crash', reason);
         this.stop('OK');
     }
