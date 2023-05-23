@@ -1,9 +1,9 @@
 import { StartableProcess } from "./startable-process";
 import { Process } from "./process";
 import { trampolineAsync } from "../utils/trampoline-async";
-import { CompleteHandler, CrashHandler } from "types";
+import { CompleteHandler, CrashHandler } from "./types";
 
-class PipeableProcess<Ctx, State> extends Process<Ctx, State> {
+export class PipeableProcess<Ctx, State> extends Process<Ctx, State> {
     protected _current?: Process<Ctx, State>;
 
     constructor(
