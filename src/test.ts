@@ -34,26 +34,25 @@ class CrashingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
 	}
 }
 new FSM.StartableProcess(
-	new FSM.InitializableProcess(
-        FSM.PipeableProcess<string, string>, 
-        [
-            new FSM.CyclicalProcess(
-                new FSM.RestartableProcess(
-                    new FSM.StartableProcess(
-                        new FSM.InitializableProcess(
-                            CompletingProcess,
-                            'Test Complete #1!'
-                        )
-                    )
-                ),
-                { cycles: 3 }
-            ),
-            new FSM.StartableProcess(
-                new FSM.InitializableProcess(CompletingProcess, 'Test Complete #2!')
-            ),
-            new FSM.StartableProcess(
-                new FSM.InitializableProcess(CrashingProcess, 'Test Crash #1!')
-            )
-        ]
-    )
-).started('CONTEXT').init('INITIAL STATE');
+	new FSM.InitializableProcess(FSM.PipeableProcess<string, string>, [
+		new FSM.CyclicalProcess(
+			new FSM.RestartableProcess(
+				new FSM.StartableProcess(
+					new FSM.InitializableProcess(
+						CompletingProcess,
+						'Test Complete #1!'
+					)
+				)
+			),
+			{ cycles: 3 }
+		),
+		new FSM.StartableProcess(
+			new FSM.InitializableProcess(CompletingProcess, 'Test Complete #2!')
+		),
+		new FSM.StartableProcess(
+			new FSM.InitializableProcess(CrashingProcess, 'Test Crash #1!')
+		)
+	])
+)
+	.started('CONTEXT')
+	.init('INITIAL STATE');
