@@ -33,32 +33,29 @@ class FaultingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
 		return 'OK' as const;
 	}
 }
+
 new FSM.StartableProcess(
 	new FSM.InitializableProcess(FSM.PipeableProcess<string, string>, [
-		new FSM.CyclicalProcess(
-			new FSM.RestartableProcess(
-				new FSM.StartableProcess(
-					new FSM.InitializableProcess(
-						CompletingProcess,
-						'#1'
-					)
+		new FSM.ConfigurableProcess(
+			new FSM.StartableProcess(
+				new FSM.InitializableProcess(
+					CompletingProcess,
+					'#1'
 				)
 			),
-			{ cycles: 3 }
+			{ cyclical: { cycles: 3 } }
 		),
 		new FSM.StartableProcess(
 			new FSM.InitializableProcess(CompletingProcess, '#2')
 		),
-		new FSM.FaultToleranceProcess(
-			new FSM.RestartableProcess(
-				new FSM.StartableProcess(
-					new FSM.InitializableProcess(
-						FaultingProcess, 
-						'#3'
-					)
+		new FSM.ConfigurableProcess(
+			new FSM.StartableProcess(
+				new FSM.InitializableProcess(
+					FaultingProcess, 
+					'#3'
 				)
 			),
-			{ faults: 2 }
+			{ faultTolerance: { faults: 2 } }
 		)
 	])
 )

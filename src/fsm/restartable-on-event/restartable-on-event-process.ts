@@ -1,5 +1,4 @@
 import { IRestartableProcess } from 'fsm/types';
-import { Args } from './types';
 import { 
 	StartedRestartableOnEventProcess 
 } from './started-restartable-on-event-process';
@@ -9,7 +8,10 @@ export class RestartableOnEventProcess<Ctx, State>
 {
 	constructor(
 		protected readonly process: IRestartableProcess<Ctx, State>,
-		protected readonly args: Args
+		protected readonly args: {
+			event: 'complete' | 'stop' | 'fault'
+			times: number
+		}
 	) {}
 
 	started(ctx: Ctx) {

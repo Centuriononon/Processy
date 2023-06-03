@@ -1,6 +1,5 @@
 import { AbstractObservableProcess } from '../abstract-observable-process';
 import { IRestartableStartedProcess } from '../types';
-import { Args } from './types';
 
 export class StartedRestartableOnEventProcess<State>
 	extends AbstractObservableProcess<State>
@@ -10,7 +9,10 @@ export class StartedRestartableOnEventProcess<State>
 
 	constructor(
 		protected readonly process: IRestartableStartedProcess<State>,
-		protected readonly args: Args
+		protected readonly args: {
+			event: 'complete' | 'stop' | 'fault';
+			times: number;
+		}
 	) {
 		super();
 	}

@@ -9,8 +9,11 @@ export class CyclicalProcess<Ctx, State>
 {
 	constructor(
 		process: IRestartableProcess<Ctx, State>,
-		{ cycles }: { cycles: number }
+		{ cycles, countFaults }: { cycles: number; countFaults?: boolean }
 	) {
-		super(process, { event: 'complete', times: cycles });
+		super(process, {
+			event: countFaults ? 'stop' : 'complete',
+			times: cycles
+		});
 	}
 }
