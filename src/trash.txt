@@ -4,7 +4,7 @@ new FSM.StartableProcess(
         processes: [
             new FSM.StartableProcess(CompletingProcess, 'Test Complete #1!'),
             new FSM.StartableProcess(CompletingProcess, 'Test Complete #2!'),
-            new FSM.StartableProcess(CrashingProcess, 'Test Crash!')
+            new FSM.StartableProcess(FaultingProcess, 'Test Fault!')
         ],
         strategy: 'LOOP'
     }
@@ -21,7 +21,7 @@ new FSM.CyclicalProcess(
                         new FSM.StartableProcess(CompletingProcess, 'Test Complete #1!'),
                         new FSM.StartableProcess(CompletingProcess, 'Test Complete #2!'),
                         new FSM.FaultToleranсeProcess( 
-                            new FSM.StartableProcess(CrashingProcess, 'Test Fault!'),
+                            new FSM.StartableProcess(FaultingProcess, 'Test Fault!'),
                             { attempts: 2 }
                         )
                     ]

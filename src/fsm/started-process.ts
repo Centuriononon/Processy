@@ -13,7 +13,7 @@ export class StartedProcess<State>
 		this.process
 			.sub('complete', state => this.pub('complete', state))
 			.sub('stop', status => this.pub('stop', status))
-			.sub('crash', reason => this.pub('crash', reason))
+			.sub('fault', reason => this.pub('fault', reason))
 			.start(state);
 
 		return this;

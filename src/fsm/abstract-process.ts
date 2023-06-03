@@ -41,8 +41,8 @@ export abstract class AbstractProcess<Ctx, State, Options = void>
         this.stop('OK');
     }
 
-    protected crash = (reason: string) => {
-        this.pub('crash', reason);
+    protected fault = (reason: string) => {
+        this.pub('fault', reason);
         this.stop('OK');
     }
 }

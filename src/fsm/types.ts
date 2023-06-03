@@ -43,5 +43,5 @@ export interface IStartedProcess<State>
 }
 
 export type CompleteHandler<State> = (s: State) => void;
-export type CrashHandler<Reason> = (r: Reason) => void;
+export type FaultHandler<Reason> = (r: Reason) => void;
 export type StopHandler<Status> = (s: Status) => void;

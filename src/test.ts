@@ -17,7 +17,7 @@ class CompletingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
 	}
 }
 
-class CrashingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
+class FaultingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
 	constructor(ctx: 'CONTEXT', options: string) {
 		super(ctx, options);
 	}
@@ -26,8 +26,8 @@ class CrashingProcess extends FSM.AbstractProcess<'CONTEXT', string, string> {
 		console.log('Testing for', this._options);
 
 		setTimeout(() => {
-			console.log(`${this._options} is crashed`);
-			this.crash('I just wanted that!');
+			console.log(`${this._options} is faulted`);
+			this.fault('I just wanted that!');
 		}, 2000);
 
 		return 'OK' as const;
@@ -50,7 +50,7 @@ new FSM.StartableProcess(
 			new FSM.InitializableProcess(CompletingProcess, 'Test Complete #2!')
 		),
 		new FSM.StartableProcess(
-			new FSM.InitializableProcess(CrashingProcess, 'Test Crash #1!')
+			new FSM.InitializableProcess(FaultingProcess, 'Test Fault #1!')
 		)
 	])
 )

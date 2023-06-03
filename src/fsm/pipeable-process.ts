@@ -40,7 +40,7 @@ export class PipeableProcess<Ctx, State> extends AbstractProcess<
 			this._current = process
 				.started(this._ctx)
 				.sub('complete', startNext)
-				.sub('crash', this.crash)
+				.sub('fault', this.fault)
 				.init(state);
 		});
 	}

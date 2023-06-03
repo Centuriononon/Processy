@@ -19,11 +19,11 @@ export class CyclicalStartedProcess<State>
 
 		this.process
 			.sub('complete', state => {
-				if (this.count++ < this.cycles) this.restart('OK');
+				if (++this.count < this.cycles) this.restart('OK');
 				else this.pub('complete', state);
 			})
 			.sub('stop', status => this.pub('stop', status))
-			.sub('crash', reason => this.pub('crash', reason))
+			.sub('fault', reason => this.pub('fault', reason))
 			.init(state);
 
 		return this;
