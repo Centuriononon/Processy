@@ -1,34 +1,43 @@
 import { AbstractObservableProcess } from '../abstract-observable-process';
 import { OK } from '../constants';
 import {
-	IRestartableStartedProcess,
+	IStartedRestartableProcess,
 	IStartableProcess,
 	IStartedProcess
 } from '../types';
 
-export class RestartableStartedProcess<Ctx, State>
+export class RestartableStartedProcess<Ctx, State, Msg>
 	extends AbstractObservableProcess<State>
-	implements IRestartableStartedProcess<State>
+	implements IStartedRestartableProcess<State, Msg>
 {
 	private current?: {
 		state: State;
-		process: IStartedProcess<State>;
+		process: IStartedProcess<State, Msg>;
 	};
 
 	constructor(
-		private readonly startable: IStartableProcess<Ctx, State>,
+		private readonly startable: IStartableProcess<Ctx, State, Msg>,
 		private readonly ctx: Ctx
 	) {
 		super();
 	}
 
-	init(state: State) {
-		if (this.current)
-            throw new Error(
-				'It is not possible to run this process more than once.'
-			);
+	working() {
+		if (!this.current) throw new Error('Process is not initiated yet.');
 
-        this.start(state);
+		return this.current.process.working();
+	}
+
+	message(body: Msg) {
+		if (!this.current) throw new Error('Process is not initiated yet.');
+
+		return this.current.process.message(body);
+	}
+
+	init(state: State) {
+		if (this.current) throw new Error('Process is initiated already.');
+
+		this.start(state);
 
 		return this;
 	}
@@ -42,17 +51,14 @@ export class RestartableStartedProcess<Ctx, State>
 			.init(state);
 	}
 
-    private start(state: State) {
+	private start(state: State) {
 		this.current = { state, process: this.started(state) };
 
-        return OK;
-    }
+		return OK;
+	}
 
 	stop(status: 'OK' | 'BAD') {
-		if (!this.current)
-			throw new Error(
-				'It is not possible to stop a not initiated process.'
-			);
+		if (!this.current) throw new Error('Process is not initiated yet.');
 
 		this.current.process.stop(status);
 
@@ -60,10 +66,10 @@ export class RestartableStartedProcess<Ctx, State>
 	}
 
 	restart(status: 'OK' | 'BAD', state?: State) {
-		if (!this.current)
-			throw new Error('Cannot restart due to no working process.');
+		if (!this.current) throw new Error('Process is not initiated yet.');
 
-        this.stop(status);
+		if (this.working()) this.stop(status);
+
 		this.start(state || this.current.state);
 
 		return OK;

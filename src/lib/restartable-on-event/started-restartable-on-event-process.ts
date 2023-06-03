@@ -1,14 +1,16 @@
+import { OK } from '../constants';
 import { AbstractObservableProcess } from '../abstract-observable-process';
-import { IRestartableStartedProcess } from '../types';
+import { IStartedRestartableProcess } from '../types';
 
-export class StartedRestartableOnEventProcess<State>
+export class StartedRestartableOnEventProcess<State, Msg>
 	extends AbstractObservableProcess<State>
-	implements IRestartableStartedProcess<State>
+	implements IStartedRestartableProcess<State, Msg>
 {
 	protected count: number = 0;
+	protected __working: boolean = false;
 
 	constructor(
-		protected readonly process: IRestartableStartedProcess<State>,
+		protected readonly process: IStartedRestartableProcess<State, Msg>,
 		protected readonly args: {
 			event: 'complete' | 'stop' | 'fault';
 			times: number;
@@ -16,6 +18,16 @@ export class StartedRestartableOnEventProcess<State>
 	) {
 		super();
 	}
+
+	working = this.process.working.bind(this.process);
+	message = this.process.message.bind(this.process);
+	stop(status: 'OK' | 'BAD') {
+		this.__working = false;
+		this.process.stop(status);
+
+		return OK;
+	}
+	restart = this.process.restart.bind(this.process);
 
 	init(state: State) {
 		if (this.args.times <= 0)
@@ -29,15 +41,14 @@ export class StartedRestartableOnEventProcess<State>
 				const isLoop = this.args.times === Infinity;
 				const isLast = ++this.count === this.args.times;
 
-				isLoop || !isLast
+				isLoop || !isLast && !this.__working
 					? this.restart('OK')
 					: this.pub(this.args.event, value);
 			})
 			.init(state);
 
+		this.__working = true;
+
 		return this;
 	}
-
-	stop = this.process.stop.bind(this.process);
-	restart = this.process.restart.bind(this.process);
 }

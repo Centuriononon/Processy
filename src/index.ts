@@ -1,1 +1,1 @@
-export * from './fsm/index';
+export * from './lib/index';
