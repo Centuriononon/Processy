@@ -1,5 +1,5 @@
-import { RestartableStartedProcess } from './restartable-started-process';
-import { IStartableProcess, IRestartableProcess } from './types';
+import { RestartableStartedProcess } from './started-restartable-process';
+import { IStartableProcess, IRestartableProcess } from '../types';
 
 export class RestartableProcess<Ctx, State>
 	implements IRestartableProcess<Ctx, State>

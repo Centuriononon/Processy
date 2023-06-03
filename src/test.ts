@@ -49,8 +49,16 @@ new FSM.StartableProcess(
 		new FSM.StartableProcess(
 			new FSM.InitializableProcess(CompletingProcess, 'Test Complete #2!')
 		),
-		new FSM.StartableProcess(
-			new FSM.InitializableProcess(FaultingProcess, 'Test Fault #1!')
+		new FSM.FaultToleranceProcess(
+			new FSM.RestartableProcess(
+				new FSM.StartableProcess(
+					new FSM.InitializableProcess(
+						FaultingProcess, 
+						'Test Fault #1!'
+					)
+				)
+			),
+			{ faults: 2 }
 		)
 	])
 )

@@ -1,5 +1,5 @@
-import { CyclicalStartedProcess } from './cyclical-started-process';
-import { IRestartableProcess } from './types';
+import { StartedCyclicalProcess } from './started-cyclical-process';
+import { IRestartableProcess } from '../types';
 
 export class CyclicalProcess<Ctx, State>
 	implements IRestartableProcess<Ctx, State>
@@ -14,7 +14,7 @@ export class CyclicalProcess<Ctx, State>
     }
 
 	started(ctx: Ctx) {
-		return new CyclicalStartedProcess(
+		return new StartedCyclicalProcess(
 			this.process.started(ctx),
 			this.cycles
 		);

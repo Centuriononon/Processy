@@ -1,10 +1,10 @@
-import { AbstractObservableProcess } from './abstract-observable-process';
-import { OK } from './constants';
+import { AbstractObservableProcess } from '../abstract-observable-process';
+import { OK } from '../constants';
 import {
 	IRestartableStartedProcess,
 	IStartableProcess,
 	IStartedProcess
-} from './types';
+} from '../types';
 
 export class RestartableStartedProcess<Ctx, State>
 	extends AbstractObservableProcess<State>

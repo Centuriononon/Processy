@@ -1,7 +1,7 @@
-import { AbstractObservableProcess } from './abstract-observable-process';
-import { IRestartableStartedProcess } from './types';
+import { AbstractObservableProcess } from '../abstract-observable-process';
+import { IRestartableStartedProcess } from '../types';
 
-export class CyclicalStartedProcess<State>
+export class StartedCyclicalProcess<State>
 	extends AbstractObservableProcess<State>
 	implements IRestartableStartedProcess<State>
 {
@@ -15,8 +15,6 @@ export class CyclicalStartedProcess<State>
 	}
 
 	init(state: State) {
-        console.log('Initiated CyclicalStartedProcess!');
-
 		this.process
 			.sub('complete', state => {
 				if (++this.count < this.cycles) this.restart('OK');
