@@ -28,8 +28,6 @@ export class RestartableStartedProcess<Ctx, State>
 				'It is not possible to run this process more than once.'
 			);
 
-		console.log('Initiated RestartableStartedProcess!');
-
         this.start(state);
 
 		return this;
@@ -64,8 +62,6 @@ export class RestartableStartedProcess<Ctx, State>
 	restart(status: 'OK' | 'BAD', state?: State) {
 		if (!this.current)
 			throw new Error('Cannot restart due to no working process.');
-
-		console.log('Restarted RestartableStartedProcess!');
 
         this.stop(status);
 		this.start(state || this.current.state);
