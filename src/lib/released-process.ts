@@ -1,15 +1,15 @@
 import { AbstractObservableProcess } from './abstract-observable-process';
-import { IProcess, IStartedProcess } from './types';
+import { IProcess, IReleasedProcess } from './types';
 
-export class StartedProcess<State, Msg>
+export class ReleasedProcess<State>
 	extends AbstractObservableProcess<State>
-	implements IStartedProcess<State, Msg>
+	implements IReleasedProcess<State>
 {
-	constructor(private readonly process: IProcess<State, Msg>) {
+	constructor(private readonly process: IProcess<State>) {
 		super();
 	}
 
-	init(state: State) {
+	start(state: State) {
 		this.process
 			.sub('complete', state => this.pub('complete', state))
 			.sub('stop', status => this.pub('stop', status))
@@ -20,6 +20,5 @@ export class StartedProcess<State, Msg>
 	}
 
 	working = this.process.working.bind(this.process);
-	message = this.process.message.bind(this.process);
 	stop = this.process.stop.bind(this.process);
 }

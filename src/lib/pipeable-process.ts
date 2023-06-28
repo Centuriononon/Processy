@@ -1,17 +1,16 @@
 import { AbstractProcess } from './abstract-process';
 import { trampolineAsync } from './utils/trampoline-async';
-import { CompleteHandler, IStartableProcess, IStartedProcess } from './types';
+import { CompleteHandler, IReleasableProcess, IReleasedProcess } from './types';
 import { OK } from './constants';
 
-export class PipeableProcess<Ctx, State, Msg> extends AbstractProcess<
+export class PipeableProcess<Ctx, State> extends AbstractProcess<
 	Ctx,
 	State,
-	IStartableProcess<Ctx, State, Msg>[],
-	Msg
+	IReleasableProcess<Ctx, State>[]
 > {
-	protected current?: IStartedProcess<State, Msg>;
+	protected current?: IReleasedProcess<State>;
 
-	constructor(ctx: Ctx, options: IStartableProcess<Ctx, State, Msg>[]) {
+	constructor(ctx: Ctx, options: IReleasableProcess<Ctx, State>[]) {
 		super(ctx, options);
 	}
 
@@ -26,7 +25,7 @@ export class PipeableProcess<Ctx, State, Msg> extends AbstractProcess<
 	}
 
 	private startProcess(
-		processes: IStartableProcess<Ctx, State, Msg>[],
+		processes: IReleasableProcess<Ctx, State>[],
 		id: number,
 		state: State
 	): Promise<any> {
@@ -37,9 +36,7 @@ export class PipeableProcess<Ctx, State, Msg> extends AbstractProcess<
 			const process = processes[id];
 
 			const startNext: CompleteHandler<State> = state => {
-				console.log(
-					'Process stopped, starting the next in the pipeline'
-				);
+				console.log('Process is completed, starting the next one');
 				
 				const isLast = id === processes.length - 1;
 
@@ -49,16 +46,10 @@ export class PipeableProcess<Ctx, State, Msg> extends AbstractProcess<
 			};
 
 			this.current = process
-				.started(this._ctx)
+				.released(this._ctx)
 				.sub('complete', startNext)
 				.sub('fault', this.fault)
-				.init(state);
+				.start(state);
 		});
-	}
-
-	protected msg(body: Msg) {
-		if (this.current) this.current?.message(body);
-
-		return OK;
 	}
 }

@@ -3,16 +3,16 @@ import {
 	RestartableOnEventProcess 
 } from './restartable-on-event/restartable-on-event-process';
 
-export class CyclicalProcess<Ctx, State, Msg>
-	extends RestartableOnEventProcess<Ctx, State, Msg>
-	implements IRestartableProcess<Ctx, State, Msg>
+export class CyclicalProcess<Ctx, State>
+	extends RestartableOnEventProcess<Ctx, State>
+	implements IRestartableProcess<Ctx, State>
 {
 	constructor(
-		process: IRestartableProcess<Ctx, State, Msg>,
-		{ cycles, countFaults }: { cycles: number; countFaults?: boolean }
+		process: IRestartableProcess<Ctx, State>,
+		{ cycles }: { cycles: number; }
 	) {
 		super(process, {
-			event: countFaults ? 'stop' : 'complete',
+			event: 'complete',
 			times: cycles
 		});
 	}

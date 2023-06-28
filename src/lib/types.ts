@@ -1,49 +1,52 @@
 import { AbstractObservableProcess } from './abstract-observable-process';
 import { AbstractProcess } from './abstract-process';
 
-export interface IProcess<State, Msg> extends AbstractObservableProcess<State> {
+export interface IProcess<State> extends AbstractObservableProcess<State> {
 	start(state: State): this;
-	message(body: Msg): 'OK';
+	// message(body: Msg): 'OK';
 	working(): boolean;
 	stop(status: 'OK' | 'BAD'): 'OK';
 }
 
-export interface IConstructableProcess<Ctx, State, Options, Msg> {
-	new (ctx: Ctx, options: Options): IProcess<State, Msg>;
+export interface IConstructableProcess<Ctx, State, Options> {
+	new(ctx: Ctx, options: Options): IProcess<State>;
 }
 
-export interface IInitializableProcess<Ctx, State, Msg> {
-	initiated(ctx: Ctx): IProcess<State, Msg>;
+export interface IInitializableProcess<Ctx, State> {
+	initiated(ctx: Ctx): IProcess<State>;
 }
 
-export interface IReinitializableProcess<Ctx, State, Options, Msg>
-	extends IInitializableProcess<Ctx, State, Msg>,
-		AbstractObservableProcess<State>,
-		AbstractProcess<Ctx, State, Options> {
+export interface IReinitializableProcess<Ctx, State, Options>
+	extends IInitializableProcess<Ctx, State>,
+	AbstractObservableProcess<State>,
+	AbstractProcess<Ctx, State, Options> {
 	reinitiated(state: State): 'OK';
 }
 
-export interface IStartableProcess<Ctx, State, Msg> {
-	started(ctx: Ctx): IStartedProcess<State, Msg>;
+export interface IReleasableProcess<Ctx, State> {
+	released(ctx: Ctx): IReleasedProcess<State>;
 }
 
-export interface IRestartableProcess<Ctx, State, Msg>
-	extends IStartableProcess<Ctx, State, Msg> {
-	started(ctx: Ctx): IStartedRestartableProcess<State, Msg>;
+export interface IRestartableProcess<Ctx, State>
+	extends IReleasableProcess<Ctx, State> {
+	released(ctx: Ctx): IReleasedRestartableProcess<State>;
 }
 
-export interface IStartedRestartableProcess<State, Msg>
-	extends AbstractObservableProcess<State>,
-		IStartedProcess<State, Msg> {
+export interface IReleasedRestartableProcess<State>
+	extends AbstractObservableProcess<State>, 
+	IReleasedProcess<State> {
 	restart(status: 'OK' | 'BAD', state?: State): 'OK';
 }
 
-export interface IStartedProcess<State, Msg>
+export interface IReleasedProcess<State>
 	extends AbstractObservableProcess<State> {
-	init(state: State): this;
-	stop: IProcess<State, Msg>['stop'];
+	start(state: State): this;
+	stop: IProcess<State>['stop'];
 	working(): boolean;
-	message(body: Msg): 'OK';
+}
+
+export interface IServicingStartedProcess<State> extends IReleasedProcess<State> {
+	
 }
 
 export type CompleteHandler<State> = (s: State) => void;

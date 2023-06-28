@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "dev": "ts-node src/test.ts"
+    "experiments": "ts-node src/experiments.ts"
   },
   "devDependencies": {
     "@types/node": "^18.14.2",

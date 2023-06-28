@@ -1,22 +1,22 @@
 import { AbstractObservableProcess } from '../abstract-observable-process';
 import { OK } from '../constants';
 import {
-	IStartedRestartableProcess,
-	IStartableProcess,
-	IStartedProcess
+	IReleasedRestartableProcess,
+	IReleasableProcess,
+	IReleasedProcess
 } from '../types';
 
-export class RestartableStartedProcess<Ctx, State, Msg>
+export class ReleasedRestartableProcess<Ctx, State>
 	extends AbstractObservableProcess<State>
-	implements IStartedRestartableProcess<State, Msg>
+	implements IReleasedRestartableProcess<State>
 {
 	private current?: {
 		state: State;
-		process: IStartedProcess<State, Msg>;
+		process: IReleasedProcess<State>;
 	};
 
 	constructor(
-		private readonly startable: IStartableProcess<Ctx, State, Msg>,
+		private readonly releasable: IReleasableProcess<Ctx, State>,
 		private readonly ctx: Ctx
 	) {
 		super();
@@ -28,31 +28,25 @@ export class RestartableStartedProcess<Ctx, State, Msg>
 		return this.current.process.working();
 	}
 
-	message(body: Msg) {
-		if (!this.current) throw new Error('Process is not initiated yet.');
-
-		return this.current.process.message(body);
-	}
-
-	init(state: State) {
+	start(state: State) {
 		if (this.current) throw new Error('Process is initiated already.');
 
-		this.start(state);
+		this.release(state);
 
 		return this;
 	}
 
-	private started(state: State) {
-		return this.startable
-			.started(this.ctx)
-			.sub('complete', state => this.pub('complete', state))
-			.sub('stop', status => this.pub('stop', status))
-			.sub('fault', reason => this.pub('fault', reason))
-			.init(state);
-	}
+	private release(state: State) {
+		const process = (
+			this.releasable
+				.released(this.ctx)
+				.sub('complete', state => this.pub('complete', state))
+				.sub('stop', status => this.pub('stop', status))
+				.sub('fault', reason => this.pub('fault', reason))
+				.start(state)
+		);
 
-	private start(state: State) {
-		this.current = { state, process: this.started(state) };
+		this.current = { state, process };
 
 		return OK;
 	}
@@ -70,7 +64,7 @@ export class RestartableStartedProcess<Ctx, State, Msg>
 
 		if (this.working()) this.stop(status);
 
-		this.start(state || this.current.state);
+		this.release(state || this.current.state);
 
 		return OK;
 	}
