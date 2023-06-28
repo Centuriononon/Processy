@@ -1,5 +1,5 @@
 import { ReleasedProcess } from './released-process';
-import { IReleasableProcess, IInitializableProcess, IConstructableProcess } from './types';
+import { IReleasableProcess, IConstructableProcess } from './types';
 
 export class ReleasableProcess<Ctx, State, Options> 
 	implements IReleasableProcess<Ctx, State> 

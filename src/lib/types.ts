@@ -12,17 +12,6 @@ export interface IConstructableProcess<Ctx, State, Options> {
 	new(ctx: Ctx, options: Options): IProcess<State>;
 }
 
-export interface IInitializableProcess<Ctx, State> {
-	initiated(ctx: Ctx): IProcess<State>;
-}
-
-export interface IReinitializableProcess<Ctx, State, Options>
-	extends IInitializableProcess<Ctx, State>,
-	AbstractObservableProcess<State>,
-	AbstractProcess<Ctx, State, Options> {
-	reinitiated(state: State): 'OK';
-}
-
 export interface IReleasableProcess<Ctx, State> {
 	released(ctx: Ctx): IReleasedProcess<State>;
 }
