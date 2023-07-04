@@ -1,14 +1,14 @@
 import { ReleasedRestartableProcess } from './released-restartable-process';
 import { IReleasableProcess } from '../types';
 
-export class RestartableProcess<Ctx, State>
-	implements IReleasableProcess<Ctx, State>
+export class RestartableProcess<State>
+	implements IReleasableProcess<State>
 {
 	constructor(
-		private readonly startable: IReleasableProcess<Ctx, State>
+		private readonly startable: IReleasableProcess<State>
 	) {}
 
-	released(ctx: Ctx) {
-		return new ReleasedRestartableProcess(this.startable, ctx);
+	released() {
+		return new ReleasedRestartableProcess(this.startable);
 	}
 }

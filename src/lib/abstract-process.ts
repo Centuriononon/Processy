@@ -2,7 +2,7 @@ import { AbstractObservableProcess } from './abstract-observable-process';
 import { OK } from './constants';
 import { IProcess } from './types';
 
-export abstract class AbstractProcess<Ctx, State, Options = void>
+export abstract class AbstractProcess<State, Options = void>
 	extends AbstractObservableProcess<State>
 	implements IProcess<State>
 {
@@ -10,7 +10,7 @@ export abstract class AbstractProcess<Ctx, State, Options = void>
 	protected __initiated: boolean = false;
 
 	constructor(
-		protected readonly _ctx: Ctx,
+		
 		protected readonly _options: Options
 	) {
 		super();

@@ -1,12 +1,11 @@
 import * as P from './index';
 
 class CompletingProcess extends P.AbstractProcess<
-	'CONTEXT',
 	string,
 	string
 > {
-	constructor(ctx: 'CONTEXT', options: string) {
-		super(ctx, options);
+	constructor(options: string) {
+		super(options);
 	}
 
 	protected run(state: string) {
@@ -22,12 +21,11 @@ class CompletingProcess extends P.AbstractProcess<
 }
 
 class FaultingProcess extends P.AbstractProcess<
-	'CONTEXT',
 	string,
 	string
 > {
-	constructor(ctx: 'CONTEXT', options: string) {
-		super(ctx, options);
+	constructor(options: string) {
+		super(options);
 	}
 
 	protected run(state: 'INITIAL_STATE') {
@@ -57,7 +55,7 @@ const experiment = (
 		]
 	)
 		// Released abstraction is used to subscribe to the process before it starts
-		.released('CONTEXT')
+		.released()
 		.sub('fault', () => console.log('PIPELINE FAULT!!!'))
 )
 

@@ -8,17 +8,17 @@ export interface IProcess<State> extends AbstractObservableProcess<State> {
 	stop(status: 'OK' | 'BAD'): 'OK';
 }
 
-export interface IConstructableProcess<Ctx, State, Options> {
-	new(ctx: Ctx, options: Options): IProcess<State>;
+export interface IConstructableProcess<State, Options> {
+	new(options: Options): IProcess<State>;
 }
 
-export interface IReleasableProcess<Ctx, State> {
-	released(ctx: Ctx): IReleasedProcess<State>;
+export interface IReleasableProcess<State> {
+	released(): IReleasedProcess<State>;
 }
 
-export interface IRestartableProcess<Ctx, State>
-	extends IReleasableProcess<Ctx, State> {
-	released(ctx: Ctx): IReleasedRestartableProcess<State>;
+export interface IRestartableProcess<State>
+	extends IReleasableProcess<State> {
+	released(): IReleasedRestartableProcess<State>;
 }
 
 export interface IReleasedRestartableProcess<State>

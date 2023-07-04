@@ -3,20 +3,20 @@ import {
 	ReleasedRestartableOnEventProcess 
 } from './released-restartable-on-event-process';
 
-export class RestartableOnEventProcess<Ctx, State>
-	implements IRestartableProcess<Ctx, State>
+export class RestartableOnEventProcess<State>
+	implements IRestartableProcess<State>
 {
 	constructor(
-		protected readonly process: IRestartableProcess<Ctx, State>,
+		protected readonly process: IRestartableProcess<State>,
 		protected readonly args: {
 			event: 'complete' | 'stop' | 'fault'
 			times: number
 		}
 	) {}
 
-	released(ctx: Ctx) {
+	released() {
 		return new ReleasedRestartableOnEventProcess(
-			this.process.released(ctx),
+			this.process.released(),
 			this.args
 		);
 	}

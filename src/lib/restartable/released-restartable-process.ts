@@ -6,7 +6,7 @@ import {
 	IReleasedProcess
 } from '../types';
 
-export class ReleasedRestartableProcess<Ctx, State>
+export class ReleasedRestartableProcess<State>
 	extends AbstractObservableProcess<State>
 	implements IReleasedRestartableProcess<State>
 {
@@ -16,8 +16,8 @@ export class ReleasedRestartableProcess<Ctx, State>
 	};
 
 	constructor(
-		private readonly releasable: IReleasableProcess<Ctx, State>,
-		private readonly ctx: Ctx
+		private readonly releasable: IReleasableProcess<State>,
+		
 	) {
 		super();
 	}
@@ -39,7 +39,7 @@ export class ReleasedRestartableProcess<Ctx, State>
 	private release(state: State) {
 		const process = (
 			this.releasable
-				.released(this.ctx)
+				.released()
 				.sub('complete', state => this.pub('complete', state))
 				.sub('stop', status => this.pub('stop', status))
 				.sub('fault', reason => this.pub('fault', reason))

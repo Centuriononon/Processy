@@ -1,12 +1,12 @@
 import { IReleasableProcess } from "lib/types";
 import { ReleasedProtectedProcess } from "./released-protected-process";
 
-export class ProtectedProcess<Ctx, State> implements IReleasableProcess<Ctx, State> {
+export class ProtectedProcess<State> implements IReleasableProcess<State> {
     constructor(
-        private readonly process: IReleasableProcess<Ctx, State>
+        private readonly process: IReleasableProcess<State>
     ) { }
 
-    released(ctx: Ctx) {
-        return new ReleasedProtectedProcess(this.process.released(ctx));
+    released() {
+        return new ReleasedProtectedProcess(this.process.released());
     };
 }
