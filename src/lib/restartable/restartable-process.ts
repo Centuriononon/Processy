@@ -1,14 +1,14 @@
-import { ReleasedRestartableProcess } from './released-restartable-process';
-import { IReleasableProcess } from '../types';
+import { IInitializableProcess } from '../types';
+import { InitiatedRestartableProcess } from './initiated-restartable-process';
 
 export class RestartableProcess<State>
-	implements IReleasableProcess<State>
+	implements IInitializableProcess<State>
 {
 	constructor(
-		private readonly startable: IReleasableProcess<State>
+		private readonly startable: IInitializableProcess<State>
 	) {}
 
-	released() {
-		return new ReleasedRestartableProcess(this.startable);
+	initiated() {
+		return new InitiatedRestartableProcess(this.startable);
 	}
 }

@@ -1,7 +1,7 @@
 import { IRestartableProcess } from '../types';
 import { 
-	ReleasedRestartableOnEventProcess 
-} from './released-restartable-on-event-process';
+	InitiatedRestartableOnEventProcess 
+} from './initiated-restartable-on-event-process';
 
 export class RestartableOnEventProcess<State>
 	implements IRestartableProcess<State>
@@ -14,9 +14,9 @@ export class RestartableOnEventProcess<State>
 		}
 	) {}
 
-	released() {
-		return new ReleasedRestartableOnEventProcess(
-			this.process.released(),
+	initiated() {
+		return new InitiatedRestartableOnEventProcess(
+			this.process.initiated(),
 			this.args
 		);
 	}

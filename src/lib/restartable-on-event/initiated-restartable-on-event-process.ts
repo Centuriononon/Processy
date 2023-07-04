@@ -1,15 +1,15 @@
-import { IReleasedRestartableProcess } from 'lib/types';
+import { IInitiatedRestartableProcess } from 'lib/types';
 import { AbstractObservableProcess } from '../abstract-observable-process';
 
-export class ReleasedRestartableOnEventProcess<State>
+export class InitiatedRestartableOnEventProcess<State>
 	extends AbstractObservableProcess<State>
-	implements IReleasedRestartableProcess<State>
+	implements IInitiatedRestartableProcess<State>
 {
 	protected count: number = 0;
 	protected stopped: boolean = false;
 
 	constructor(
-		protected readonly process: IReleasedRestartableProcess<State>,
+		protected readonly process: IInitiatedRestartableProcess<State>,
 		protected readonly args: {
 			event: 'complete' | 'stop' | 'fault';
 			times: number;

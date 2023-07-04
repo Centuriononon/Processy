@@ -22,7 +22,7 @@ export abstract class AbstractProcess<State, Options = void>
 	
 	readonly start = (state: State) => {
 		if (this.__initiated) 
-            throw new Error('Process has already been Released.');
+            throw new Error('Process has already been Initiated.');
 
 		this.__working = true;
 		this.__initiated = true;

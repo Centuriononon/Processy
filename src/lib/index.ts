@@ -1,4 +1,4 @@
-export { ReleasableProcess } from './releasable-process';
+export { InitializableProcess } from './initializable-process';
 export { RestartableProcess } from './restartable/restartable-process';
 export { CyclicalProcess } from './cyclical-process';
 export { FaultToleranceProcess } from './fault-tolerance-process';

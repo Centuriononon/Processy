@@ -41,22 +41,22 @@ class FaultingProcess extends P.AbstractProcess<
 }
 
 const experiment = (
-	new P.ReleasableProcess(
+	new P.InitializableProcess(
 		P.PipeableProcess,
 		[
-			new P.ReleasableProcess(CompletingProcess, '#1'),
-			new P.ReleasableProcess(CompletingProcess, '#2'),
+			new P.InitializableProcess(CompletingProcess, '#1'),
+			new P.InitializableProcess(CompletingProcess, '#2'),
 			new P.FaultToleranceProcess(
 				new P.RestartableProcess(
-					new P.ReleasableProcess(FaultingProcess, '#3')
+					new P.InitializableProcess(FaultingProcess, '#3')
 				),
 				{ faults: 4 }
 			)
 		]
 	)
-		// Released abstraction is used to subscribe to the process before it starts
-		.released()
-		.sub('fault', () => console.log('PIPELINE FAULT!!!'))
 )
 
-experiment.start('INITIAL_STATE');
+experiment.initiated().start('INITIAL_STATE'); 
+experiment.initiated().start('INITIAL_STATE'); 
+experiment.initiated().start('INITIAL_STATE'); 
+experiment.initiated().start('INITIAL_STATE'); 

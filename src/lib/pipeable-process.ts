@@ -1,15 +1,15 @@
 import { AbstractProcess } from './abstract-process';
 import { trampolineAsync } from './utils/trampoline-async';
-import { CompleteHandler, IReleasableProcess, IReleasedProcess } from './types';
+import { CompleteHandler, IInitializableProcess, IInitiatedProcess } from './types';
 import { OK } from './constants';
 
 export class PipeableProcess<State> extends AbstractProcess<
 	State,
-	IReleasableProcess<State>[]
+	IInitializableProcess<State>[]
 > {
-	protected current?: IReleasedProcess<State>;
+	protected current?: IInitiatedProcess<State>;
 
-	constructor(options: IReleasableProcess<State>[]) {
+	constructor(options: IInitializableProcess<State>[]) {
 		super(options);
 	}
 
@@ -24,7 +24,7 @@ export class PipeableProcess<State> extends AbstractProcess<
 	}
 
 	private startProcess(
-		processes: IReleasableProcess<State>[],
+		processes: IInitializableProcess<State>[],
 		id: number,
 		state: State
 	): Promise<any> {
@@ -45,7 +45,7 @@ export class PipeableProcess<State> extends AbstractProcess<
 			};
 
 			this.current = process
-				.released()
+				.initiated()
 				.sub('complete', startNext)
 				.sub('fault', this.fault)
 				.start(state);

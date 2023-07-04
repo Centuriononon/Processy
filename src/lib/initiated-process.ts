@@ -1,9 +1,9 @@
 import { AbstractObservableProcess } from './abstract-observable-process';
-import { IProcess, IReleasedProcess } from './types';
+import { IProcess, IInitiatedProcess } from './types';
 
-export class ReleasedProcess<State>
+export class InitiatedProcess<State>
 	extends AbstractObservableProcess<State>
-	implements IReleasedProcess<State>
+	implements IInitiatedProcess<State>
 {
 	constructor(private readonly process: IProcess<State>) {
 		super();

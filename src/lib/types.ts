@@ -12,29 +12,29 @@ export interface IConstructableProcess<State, Options> {
 	new(options: Options): IProcess<State>;
 }
 
-export interface IReleasableProcess<State> {
-	released(): IReleasedProcess<State>;
+export interface IInitializableProcess<State> {
+	initiated(): IInitiatedProcess<State>;
 }
 
 export interface IRestartableProcess<State>
-	extends IReleasableProcess<State> {
-	released(): IReleasedRestartableProcess<State>;
+	extends IInitializableProcess<State> {
+	initiated(): IInitiatedRestartableProcess<State>;
 }
 
-export interface IReleasedRestartableProcess<State>
+export interface IInitiatedRestartableProcess<State>
 	extends AbstractObservableProcess<State>, 
-	IReleasedProcess<State> {
+	IInitiatedProcess<State> {
 	restart(status: 'OK' | 'BAD', state?: State): 'OK';
 }
 
-export interface IReleasedProcess<State>
+export interface IInitiatedProcess<State>
 	extends AbstractObservableProcess<State> {
 	start(state: State): this;
 	stop: IProcess<State>['stop'];
 	working(): boolean;
 }
 
-export interface IServicingStartedProcess<State> extends IReleasedProcess<State> {
+export interface IServicingStartedProcess<State> extends IInitiatedProcess<State> {
 	
 }
 

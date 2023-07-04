@@ -1,22 +1,22 @@
 import { AbstractObservableProcess } from '../abstract-observable-process';
 import { OK } from '../constants';
 import {
-	IReleasedRestartableProcess,
-	IReleasableProcess,
-	IReleasedProcess
+	IInitiatedRestartableProcess,
+	IInitializableProcess,
+	IInitiatedProcess
 } from '../types';
 
-export class ReleasedRestartableProcess<State>
+export class InitiatedRestartableProcess<State>
 	extends AbstractObservableProcess<State>
-	implements IReleasedRestartableProcess<State>
+	implements IInitiatedRestartableProcess<State>
 {
 	private current?: {
 		state: State;
-		process: IReleasedProcess<State>;
+		process: IInitiatedProcess<State>;
 	};
 
 	constructor(
-		private readonly releasable: IReleasableProcess<State>,
+		private readonly Initializable: IInitializableProcess<State>,
 		
 	) {
 		super();
@@ -31,15 +31,15 @@ export class ReleasedRestartableProcess<State>
 	start(state: State) {
 		if (this.current) throw new Error('Process is initiated already.');
 
-		this.release(state);
+		this.initiate(state);
 
 		return this;
 	}
 
-	private release(state: State) {
+	private initiate(state: State) {
 		const process = (
-			this.releasable
-				.released()
+			this.Initializable
+				.initiated()
 				.sub('complete', state => this.pub('complete', state))
 				.sub('stop', status => this.pub('stop', status))
 				.sub('fault', reason => this.pub('fault', reason))
@@ -64,7 +64,7 @@ export class ReleasedRestartableProcess<State>
 
 		if (this.working()) this.stop(status);
 
-		this.release(state || this.current.state);
+		this.initiate(state || this.current.state);
 
 		return OK;
 	}
